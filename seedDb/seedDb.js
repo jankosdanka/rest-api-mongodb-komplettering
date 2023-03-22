@@ -1,17 +1,23 @@
 require('dotenv').config()
 const mongoose = require('mongoose')
 // @ts-ignore
-const springTerm2023MockData = require('./mockdata/springTerm2023.json')
+const springTerm2023MockData = require('./mockdata/springTerm2023')
 // @ts-ignore
-const fallTermMock2023Data = require('./mockdata/fallTerm2023.json')
+const fallTermMock2023Data = require('./mockdata/fallTerm2023')
+const Term = require('../src/models/term')
 
-const seedPresidentsDb = async (connectionString) => {
+const seedTermsDb = async (connectionString) => {
 	let conn
 	try {
 		mongoose.set('strictQuery', false)
 		conn = await mongoose.connect(connectionString)
 
 		// POPULATE DATA ACCOORDING TO YOUR MODELS
+		await Term.deleteMany()
+
+		await Term.create(fallTermMock2023Data.mockTermData)
+		await Term.create(springTerm2023MockData.mockTermData)
+
 		console.log(springTerm2023MockData)
 		console.log(fallTermMock2023Data)
 
@@ -24,4 +30,4 @@ const seedPresidentsDb = async (connectionString) => {
 	}
 }
 
-seedPresidentsDb(process.env.MONGO_URI)
+seedTermsDb(process.env.MONGO_URI)

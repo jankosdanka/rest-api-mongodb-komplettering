@@ -1,7 +1,10 @@
 require('dotenv').config()
 const express = require('express')
 const { default: mongoose } = require('mongoose')
-
+const { errorMiddleware } = require('./middleware/errorMiddleware')
+const { notFoundMiddleware } = require('./middleware/notFoundMiddleware')
+const classRoutes = require('./routes/classRoutes')
+const studentRoutes = require('./routes/studentRoutes')
 const app = express()
 
 app.use(express.json())
@@ -11,7 +14,11 @@ app.use((req, res, next) => {
 	next()
 })
 
+app.use('/api/v1/classes', classRoutes)
+app.use('/api/v1/students', studentRoutes)
+
 const port = 5000
+
 const run = async () => {
 	try {
 		mongoose.set('strictQuery', false)
